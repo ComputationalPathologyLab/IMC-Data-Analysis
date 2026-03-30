@@ -12,26 +12,26 @@ A comprehensive, reproducible workflow for Imaging Mass Cytometry (IMC) data ana
 
 # Table of Contents
 
-1. Introduction  
-2. Imaging Mass Cytometry  
-3. Workflow Overview  
-4. Input Data Structure  
-5. Directory Preparation  
-6. Channel Stacking  
-7. Panel Annotation  
-8. Steinbock Processing  
-9. Image Metadata  
-10. R Analysis  
-11. Marker Selection  
-12. Dimensionality Reduction  
-13. Heatmap  
-14. Cell Annotation  
-15. Spatial Visualization  
-16. Saving Outputs  
-17. Troubleshooting  
-18. Reproducibility  
-19. Repository Scope  
-20. Author  
+- [1. Introduction](#1-introduction)  
+- [2. Imaging Mass Cytometry](#2-imaging-mass-cytometry)  
+- [3. Workflow Overview](#3-workflow-overview)  
+- [4. Input Data Structure](#4-input-data-structure)  
+- [5. Directory Preparation](#5-directory-preparation)  
+- [6. Channel Stacking](#6-channel-stacking)  
+- [7. Panel Annotation](#7-panel-annotation)  
+- [8. Steinbock Processing](#8-steinbock-processing)  
+- [9. Image Metadata](#9-image-metadata)  
+- [10. R Analysis](#10-r-analysis)  
+- [11. Marker Selection](#11-marker-selection)  
+- [12. Dimensionality Reduction and Clustering](#12-dimensionality-reduction-and-clustering)  
+- [13. Heatmap and Marker Interpretation](#13-heatmap-and-marker-interpretation)  
+- [14. Cell Type Annotation](#14-cell-type-annotation)  
+- [15. Spatial Visualization](#15-spatial-visualization)  
+- [16. Saving Outputs](#16-saving-outputs)  
+- [17. Troubleshooting](#17-troubleshooting)  
+- [18. Reproducibility](#18-reproducibility)  
+- [19. Repository Scope](#19-repository-scope)  
+- [20. Author](#20-author)  
 
 ---
 
