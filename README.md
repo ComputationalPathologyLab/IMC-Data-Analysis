@@ -721,10 +721,10 @@ The pipeline provides a modular framework that can be expanded to accommodate la
 
 --- 
 
+---
+
 # 20. Author
 
-Rashid Hussain
-
-Postdoctoral Researcher
-
+Rashid Hussain  
+Postdoctoral Researcher  
 Humanitas Research Hospital, Italy
