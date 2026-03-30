@@ -79,6 +79,7 @@ Dimensionality reduction and clustering
 Cell type annotation
         ↓
 Spatial visualization
+```
 
 This sequence reflects the logical transition from raw image data to biologically interpretable cellular and spatial outputs
 
@@ -721,7 +722,6 @@ The pipeline provides a modular framework that can be expanded to accommodate la
 
 --- 
 
----
 
 # 20. Author
 
