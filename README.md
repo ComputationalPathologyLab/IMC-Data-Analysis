@@ -490,3 +490,239 @@ assayNames(spe)
 head(colData(spe))
 rownames(spe)
 ```
+# 11. Marker Selection
+
+Purpose: To define biologically relevant markers for downstream clustering and annotation.
+
+Marker selection focuses on proteins that distinguish major immune, stromal, and tumor cell populations. Only markers present in the dataset are retained.
+
+## 11.1 Define Marker Set
+
+```r
+phenotype_markers <- c(
+  "CD3", "CD4", "CD8", "FoxP3",
+  "CD20", "CD21", "CD10", "CD72a", "CD138",
+  "CD68", "CD163", "CD11c", "MHC_II", "CD86",
+  "CD66b", "CD56",
+  "CD31", "ERG",
+  "aSMA"
+)
+
+phenotype_markers <- phenotype_markers[phenotype_markers %in% rownames(spe)]
+phenotype_markers
+length(phenotype_markers)
+```
+
+Interpretation:
+
+- The marker list is filtered to retain only those present in the dataset  
+- This ensures compatibility with downstream visualization and clustering  
+- Selected markers represent key immune and structural compartments  
+
+---
+
+# 12. Dimensionality Reduction and Clustering
+
+Purpose: To reduce high-dimensional marker space into interpretable embeddings and identify cellular populations.
+
+## 12.1 Normalization
+
+```r
+library(scran)
+library(scater)
+
+spe <- logNormCounts(spe)
+```
+
+Interpretation:
+
+Normalization stabilizes variance and ensures comparability across cells by scaling marker intensities.
+
+## 12.2 Principal Component Analysis
+
+```r
+spe <- runPCA(spe)
+```
+
+Interpretation:
+
+PCA reduces dimensionality while preserving the most informative variance in the dataset.
+
+## 12.3 UMAP Embedding
+
+```r
+spe <- runUMAP(spe)
+```
+
+Interpretation:
+
+UMAP projects cells into a low-dimensional space, enabling visualization of population structure.
+
+## 12.4 Visualization
+
+```r
+plotUMAP(spe)
+```
+
+Interpretation:
+
+Clusters in UMAP space represent phenotypically similar cell populations.
+
+# 13. Heatmap and Marker Interpretation
+
+Purpose: To visualize marker expression patterns across clusters and support biological interpretation.
+
+Heatmaps provide an overview of marker enrichment across identified cell populations and assist in assigning cell identities.
+
+## 13.1 Generate Heatmap
+
+```r
+library(dittoSeq)
+library(viridis)
+
+dittoHeatmap(
+  spe,
+  genes = phenotype_markers,
+  assay = "exprs",
+  scale = "none",
+  heatmap.colors = viridis(100),
+  annot.by = "nn_clusters"
+)
+```
+
+Interpretation:
+
+- Rows represent markers  
+- Columns represent cells or clusters  
+- Color intensity reflects expression level  
+- Cluster annotations enable comparison across phenotypes  
+
+---
+
+# 14. Cell Type Annotation
+
+Purpose: To assign biological identities to clusters based on marker expression.
+
+Cell types are defined by canonical marker combinations:
+
+- CD3, CD4, CD8 → T cells  
+- CD20 → B cells  
+- CD138 → Plasma cells  
+- CD68, CD163 → Myeloid cells  
+- CD66b → Neutrophils  
+- CD56 → NK cells  
+- CD31, ERG → Endothelial cells  
+- aSMA → Stromal cells  
+
+Interpretation:
+
+Cluster annotation is performed by examining marker enrichment patterns in heatmaps and UMAP embeddings. This step translates computational clusters into biologically meaningful categories.
+
+---
+
+# 15. Spatial Visualization
+
+Purpose: To map annotated cell populations back to tissue space.
+
+## 15.1 Plot Spatial Distribution
+
+```r
+plotSpatial(
+  spe,
+  colour_by = "nn_clusters"
+)
+```
+
+Interpretation:
+
+- Each point represents a cell  
+- Spatial coordinates preserve tissue architecture  
+- Color coding reflects cluster identity  
+
+Spatial visualization enables the study of tissue organization and cellular interactions.
+
+---
+
+# 16. Saving Outputs
+
+Purpose: To export figures and results for reporting and downstream analysis.
+
+## 16.1 Save UMAP Plot
+
+```r
+ggsave("umap.png")
+```
+
+## 16.2 Save Heatmap
+
+```r
+pdf("heatmap.pdf")
+dittoHeatmap(
+  spe,
+  genes = phenotype_markers,
+  assay = "exprs"
+)
+dev.off()
+```
+
+Interpretation:
+
+Outputs are saved in standard formats for reproducibility and publication.
+
+# 17. Troubleshooting
+
+Purpose: To identify and resolve common issues encountered during IMC data processing.
+
+Common issues and resolutions:
+
+- Panel mismatch: Ensure that `panel.csv` order matches the channel stacking order  
+- Missing images.csv: Confirm presence of `images.csv` in the data directory  
+- Channel inconsistency: Verify that all channels have identical dimensions  
+- Segmentation failure: Check correct assignment of nuclear (1) and membrane (2) channels  
+- Data import errors: Ensure consistent naming across images, masks, and metadata files  
+
+Interpretation:
+
+Most errors arise from inconsistencies between image files, metadata, and panel annotation. Maintaining strict alignment across all inputs ensures successful execution of the pipeline.
+
+---
+
+# 18. Reproducibility
+
+Purpose: To ensure that the analysis workflow can be reliably reproduced.
+
+Key considerations:
+
+- Fixed channel order during stacking  
+- Version-controlled scripts and configuration files  
+- Consistent directory structure  
+- Documented parameter settings for segmentation and analysis  
+
+Interpretation:
+
+Reproducibility is achieved by standardizing all preprocessing and analysis steps, allowing consistent results across datasets and environments.
+
+---
+
+# 19. Repository Scope
+
+Purpose: To define the applicability and limitations of the pipeline.
+
+Scope:
+
+- Designed for single ROI processing  
+- Extendable to multi-sample and batch analysis  
+- Compatible with spatial and single-cell downstream workflows  
+- Adaptable to different IMC panels and experimental designs  
+
+Interpretation:
+
+The pipeline provides a modular framework that can be expanded to accommodate larger datasets and more complex experimental setups.
+
+---
+
+# 20. Author
+
+Rashid Hussain  
+Postdoctoral Researcher  
+Humanitas Research Hospital, Italy
