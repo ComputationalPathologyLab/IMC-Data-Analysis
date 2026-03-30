@@ -291,10 +291,10 @@ channel,name,keep,deepcell
 80ArAr,80ArAr,1,
 ```
 Interpretation:
-- channel: Defines the metal isotope corresponding to each acquisition channel.
-- name: Specifies the biological marker associated with the channel.
-- keep: Indicates whether the channel should be retained for analysis (1 = keep).
-- deepcell: Defines segmentation roles:
+- `channel:` Defines the metal isotope corresponding to each acquisition channel.
+- `name:` Specifies the biological marker associated with the channel.
+- `keep:` Indicates whether the channel should be retained for analysis (1 = keep).
+- `deepcell:` Defines segmentation roles:
  - 1 denotes nuclear channels used for nucleus detection
  - 2 denotes membrane or cytoplasmic channels used for cell boundary delineation
 
@@ -316,7 +316,7 @@ steinbock segment deepcell --app mesmer --minmax
 Interpretation:
 Segmentation is performed using DeepCell Mesmer, a deep learning-based model trained to identify cellular boundaries. The model integrates nuclear and membrane channels defined in the panel.csv file to generate accurate cell masks.
 
-The output is stored in the masks/ directory as labeled TIFF images, where each pixel is assigned to a specific cell object.
+The output is stored in the `masks/` directory as labeled TIFF images, where each pixel is assigned to a specific cell object.
 
 ## 8.2 Intensity Measurement
 
@@ -326,7 +326,7 @@ steinbock measure intensities
 Interpretation:
 For each segmented cell, pixel intensities are aggregated across all channels. The default aggregation function is the mean, resulting in a matrix where rows correspond to cells and columns correspond to markers.
 
-The output is stored in the intensities/ directory.
+The output is stored in the `intensities/` directory.
 
 ## 8.3 Morphological Feature Extraction
 ```bash
@@ -341,7 +341,7 @@ Morphological properties are computed for each segmented cell, including:
 
 These features provide structural context for downstream analyses.
 
-The output is stored in the regionprops/ directory.
+The output is stored in the `regionprops/` directory.
 
 ⸻
 
@@ -355,7 +355,7 @@ A spatial graph is constructed where:
 - Nodes represent individual cells
 - Edges represent spatial proximity between cells
 
-The parameter dmax = 4 defines the maximum expansion radius used to determine neighboring relationships.
+The parameter `dmax = 4` defines the maximum expansion radius used to determine neighboring relationships.
 
 The output is stored in the neighbors/ directory.
 
@@ -371,9 +371,9 @@ steinbock export anndata --intensities intensities --data regionprops --neighbor
 steinbock export graphs --format graphml --data intensities --data regionprops
 ```
 Interpretation:
-- cells.csv: Combined table containing intensity and morphological features
-- cells.h5ad: AnnData object for interoperability with Python-based single-cell workflows
-- graphs/: GraphML files encoding spatial relationships between cells
+- `cells.csv`: Combined table containing intensity and morphological features
+- `cells.h5ad`: AnnData object for interoperability with Python-based single-cell workflows
+- `graphs/`: GraphML files encoding spatial relationships between cells
 
 These outputs form the basis for downstream analysis in R or Python environments.
 
@@ -719,10 +719,10 @@ Interpretation:
 
 The pipeline provides a modular framework that can be expanded to accommodate larger datasets and more complex experimental setups.
 
----
+--- 
 
-# 20. Author
+20. Author
 
-Rashid Hussain  
-Postdoctoral Researcher  
+Rashid Hussain
+Postdoctoral Researcher
 Humanitas Research Hospital, Italy
