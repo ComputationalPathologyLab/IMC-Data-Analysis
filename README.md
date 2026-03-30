@@ -231,8 +231,11 @@ print(f"Channels stacked: {len(channel_order)}")
 ```bash
 python stack_one_roi.py ROI001_D13 data/img/ROI001_D13.tiff
 ```
+
 Interpretation: The output file data/img/ROI001_D13.tiff contains all marker channels in a single structured image. This file serves as the direct input for Steinbock segmentation and downstream analysis.
+
 ---
+
 # 7. Panel Annotation
 
 Purpose: To define marker identity and segmentation roles for each channel in the multi-channel TIFF image.
@@ -406,3 +409,84 @@ write.csv(images, "data/images.csv", row.names = FALSE)
 ```
 Interpretation:
 The generated images.csv file enables the integration of spatial coordinates and cell-level measurements within the SpatialExperiment object used in downstream R-based analysis.
+
+# 9. Image Metadata
+
+Purpose: To define image-level metadata required for integration of image data with cell-level measurements.
+
+Steinbock requires an `images.csv` file that links each image to its corresponding metadata, including dimensions and identifiers. This file ensures consistency between image data, segmentation masks, and extracted features.
+
+## 9.1 Example images.csv
+
+```csv
+image,width_px,height_px
+ROI001_D13,1000,1000
+```
+
+Interpretation:
+
+- image: Unique identifier of the ROI; must match filenames used in segmentation and intensity outputs  
+- width_px: Image width in pixels  
+- height_px: Image height in pixels  
+
+Accurate metadata alignment is critical for proper mapping between spatial coordinates, segmentation masks, and cell-level data. Mismatches in identifiers or dimensions may lead to errors during data import or spatial visualization.
+
+## 9.2 Generation in R
+
+```r
+images <- data.frame(
+  image = "ROI001_D13",
+  width_px = 1000,
+  height_px = 1000
+)
+
+write.csv(images, "data/images.csv", row.names = FALSE)
+```
+
+Interpretation:  
+The generated `images.csv` file enables the integration of spatial coordinates and cell-level measurements within the SpatialExperiment object used in downstream R-based analysis.
+
+---
+
+# 10. R Analysis
+
+Purpose: To import Steinbock-generated data into R and organize it into a structured format suitable for downstream single-cell and spatial analysis.
+
+The `imcRtools` package provides functions to read Steinbock outputs and convert them into a `SpatialExperiment` object.
+
+## 10.1 Load Required Libraries
+
+```r
+library(imcRtools)
+library(SingleCellExperiment)
+library(SpatialExperiment)
+```
+
+## 10.2 Import Steinbock Data
+
+```r
+spe <- read_steinbock(
+  path = "data",
+  intensities_folder = "intensities",
+  regionprops_folder = "regionprops",
+  graphs_folder = "neighbors",
+  image_file = "images.csv",
+  panel_file = "panel.csv"
+)
+```
+
+Interpretation:
+
+- assay(spe, "counts"): Raw marker intensities per cell  
+- colData(spe): Cell-level metadata  
+- spatialCoords(spe): Spatial coordinates  
+- colPairs(spe): Cell-cell interaction graph  
+
+## 10.3 Inspect Data Structure
+
+```r
+dim(spe)
+assayNames(spe)
+head(colData(spe))
+rownames(spe)
+```
